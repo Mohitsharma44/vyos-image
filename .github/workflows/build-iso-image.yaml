@@ -39,7 +39,7 @@ jobs:
   #       run: find scripts -name '*.sh' -exec bash {} \;
 
   #     - name: Clone Repository
-  #       run: git clone -b ${{ env.branch }} --single-branch --depth 1 https://github.com/vyos/vyos-build.git
+  #       run: git clone -b equuleus --depth 1 https://github.com/vyos/vyos-build.git
 
   #     - name: Configure
   #       working-directory: vyos-build
@@ -80,7 +80,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Clone Repository
-        run: git clone -b ${{ env.branch }} --single-branch --depth 1 https://github.com/vyos/vyos-vm-images.git
+        run: git clone --depth 1 https://github.com/vyos/vyos-vm-images.git
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
