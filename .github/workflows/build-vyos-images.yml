@@ -33,14 +33,14 @@ jobs:
 
       - name: Generate Version
         run: |
-          echo "version=${{ env.version }}-dev-$(git rev-parse --short HEAD)" >>$GITHUB_ENV
+          echo "version=${{ env.vyos_version }}-dev-$(git rev-parse --short HEAD)" >>$GITHUB_ENV
 
       - name: Clone Repository
         run: git clone -b equuleus --depth 1 https://github.com/vyos/vyos-build.git
 
       - name: Configure
         working-directory: vyos-build
-        run: ./configure --architecture amd64 --build-by "Mohitsharma44" --build-type release --version ${{ env.version }}
+        run: ./configure --architecture amd64 --build-by "Mohitsharma44" --build-type release --version ${{ env.vyos_version }}
 
       - name: Prepare custom packages
         run: |
@@ -53,20 +53,20 @@ jobs:
         run: sudo make iso
 
       - name: Rename ISO
-        run: mv vyos-build/build/live-image-amd64.hybrid.iso vyos-${{ env.version }}.iso
+        run: mv vyos-build/build/live-image-amd64.hybrid.iso vyos-${{ env.vyos_version }}.iso
 
       - uses: actions/upload-artifact@v3
         with:
-          name: vyos-${{ env.version }}.iso
-          path: vyos-${{ env.version }}.iso
+          name: vyos-${{ env.vyos_version }}.iso
+          path: vyos-${{ env.vyos_version }}.iso
 
       - name: Checksums
         id: checksums
         run: |
           echo "### Vyos ISO image generated :rocket:"
-          echo "md5sum=$(md5sum vyos-${{ env.version }}.iso | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
-          echo "sha256sum=$(sha256sum vyos-${{ env.version }}.iso | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
-          echo "sha512sum=$(sha512sum vyos-${{ env.version }}.iso | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "md5sum=$(md5sum vyos-${{ env.vyos_version }}.iso | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "sha256sum=$(sha256sum vyos-${{ env.vyos_version }}.iso | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "sha512sum=$(sha512sum vyos-${{ env.vyos_version }}.iso | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
 
   convert:
     runs-on: ubuntu-latest
@@ -95,21 +95,21 @@ jobs:
         uses: actions/download-artifact@v3
         id: artifact_download
         with:
-          name: vyos-${{ env.version }}.iso
+          name: vyos-${{ env.vyos_version }}.iso
       
       - name: Build qcow2 image
         working-directory: vyos-vm-images
-        run: ansible-playbook qemu.yml -e iso_local=${{ steps.artifact_download.outputs.download-path }} -e vyos_qemu_img=/tmp/vyos-{{ env.version }}-qemu.qcow2 -e cloud_init=true -e cloud_init_disable_config=true -e cloud_init_ds=NoCloud -e grub_console=serial  -e guest_agent=qemu -e keep_user=true -e enable_ssh=true -e enable_dhcp=true -e disk_size=20 -e parttable_type=mbr
+        run: ansible-playbook qemu.yml -e iso_local=${{ steps.artifact_download.outputs.download-path }} -e vyos_qemu_img=/tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 -e cloud_init=true -e cloud_init_disable_config=true -e cloud_init_ds=NoCloud -e grub_console=serial  -e guest_agent=qemu -e keep_user=true -e enable_ssh=true -e enable_dhcp=true -e disk_size=20 -e parttable_type=mbr
 
       - uses: actions/upload-artifact@v3
         with:
-          name: vyos-{{ env.version }}-qemu.qcow2
-          path: /tmp/vyos-{{ env.version }}-qemu.qcow2
+          name: vyos-{{ env.vyos_version }}-qemu.qcow2
+          path: /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2
 
       - name: Checksums
         id: checksums
         run: |
           echo "### Vyos Qcow2 image generated :rocket:"
-          echo "md5sum=$(md5sum /tmp/vyos-{{ env.version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
-          echo "sha256sum=$(sha256sum /tmp/vyos-{{ env.version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
-          echo "sha512sum=$(sha512sum /tmp/vyos-{{ env.version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "md5sum=$(md5sum /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "sha256sum=$(sha256sum /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "sha512sum=$(sha512sum /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
