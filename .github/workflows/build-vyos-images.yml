@@ -99,7 +99,7 @@ jobs:
       
       - name: Build qcow2 image
         working-directory: vyos-vm-images
-        run: ansible-playbook qemu.yml -e vyos_version=${{ env.vyos_version }} -e iso_local=${{ steps.artifact_download.outputs.download-path }} -e vyos_qemu_img=/tmp/vyos-${{ env.vyos_version }}-qemu.qcow2 -e cloud_init=true -e cloud_init_disable_config=true -e cloud_init_ds=NoCloud -e grub_console=serial  -e guest_agent=qemu -e keep_user=true -e enable_ssh=true -e enable_dhcp=true -e disk_size=20 -e parttable_type=mbr
+        run: ansible-playbook qemu.yml -e vyos_version=${{ env.vyos_version }} -e iso_local=${{ steps.artifact_download.outputs.download-path }}/vyos-${{ env.vyos_version }}.iso -e vyos_qemu_img=/tmp/vyos-${{ env.vyos_version }}-qemu.qcow2 -e cloud_init=true -e cloud_init_disable_config=true -e cloud_init_ds=NoCloud -e grub_console=serial  -e guest_agent=qemu -e keep_user=true -e enable_ssh=true -e enable_dhcp=true -e disk_size=20 -e parttable_type=mbr
 
       - uses: actions/upload-artifact@v3
         with:
