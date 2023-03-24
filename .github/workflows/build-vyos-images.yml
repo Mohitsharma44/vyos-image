@@ -103,13 +103,13 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: vyos-{{ env.vyos_version }}-qemu.qcow2
-          path: /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2
+          name: vyos-${{ env.vyos_version }}-qemu.qcow2
+          path: /tmp/vyos-${{ env.vyos_version }}-qemu.qcow2
 
       - name: Checksums
         id: checksums
         run: |
           echo "### Vyos Qcow2 image generated :rocket:"
-          echo "md5sum=$(md5sum /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
-          echo "sha256sum=$(sha256sum /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
-          echo "sha512sum=$(sha512sum /tmp/vyos-{{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "md5sum=$(md5sum /tmp/vyos-${{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "sha256sum=$(sha256sum /tmp/vyos-${{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
+          echo "sha512sum=$(sha512sum /tmp/vyos-${{ env.vyos_version }}-qemu.qcow2 | cut -d ' ' -f 1)" >> $GITHUB_STEP_SUMMARY
